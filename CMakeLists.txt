@@ -3,4 +3,4 @@ project(MiniMaxTicTacToe)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(MiniMaxTicTacToe tictactoe.cpp)
+add_executable(MiniMaxTicTacToe Player.cpp Player.h main.cpp TicTacToe.cpp TicTacToe.h)
