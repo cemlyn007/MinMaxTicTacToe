@@ -15,10 +15,10 @@ class Player {
 public:
     std::string name;
     char marker;
-    Player(std::string player_name="Unknown", char player_marker='!');
-    std::string get_name();
-    char get_marker();
-    void print_info();
+    Player(std::string player_name, int player_marker);
+    std::string getName();
+    int getMarker();
+    void printInfo();
 };
 
 

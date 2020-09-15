@@ -19,25 +19,27 @@ public:
     int m;
     int n;
     int k;
-    Player max;
-    Player min;
+    Player PLAYER_MAX;
+    Player PLAYER_MIN;
     Board board;
 
     TicTacToe(int m, int n, int k, Player player1, Player player2);
 
-    int end_test(char marker);
+    int endTest(char marker);
 
-    bool check_verts(int marker);
+    bool checkVertical(int marker);
 
-    bool check_horiz(int marker);
+    bool checkHoriz(int marker);
 
-    bool check_diag(int marker, int direction);
+    bool checkDiag(int marker, int direction);
 
-    bool check_win(char marker);
+    bool checkWin(char marker);
 
-    static std::tuple<int, int> get_user_input();
+    std::tuple<int, int> getUserInput();
 
     void play();
+
+    void showBoard();
 };
 
 

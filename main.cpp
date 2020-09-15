@@ -10,11 +10,11 @@
 int main() {
     std::cout << "Beginning" << std::endl;
 
-    Player player1("Cemlyn", 'X');
-    player1.print_info();
+    Player player1("Cemlyn", Board::O);
+    player1.printInfo();
 
-    Player player2("Bot", 'O');
-    player2.print_info();
+    Player player2("Bot", Board::X);
+    player2.printInfo();
 
 
     TicTacToe game(4, 5, 4, player1, player2);

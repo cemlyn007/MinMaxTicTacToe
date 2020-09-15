@@ -5,19 +5,19 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(std::string player_name, char player_marker) {
+Player::Player(std::string player_name, int player_marker) {
     name = std::move(player_name);
     marker = player_marker;
 }
 
-std::string Player::get_name() {
+std::string Player::getName() {
     return Player::name;
 }
 
-char Player::get_marker() {
+int Player::getMarker() {
     return Player::marker;
 }
 
-void Player::print_info() {
-    std::cout << "Player name: " << Player::get_name() << " Marker: " << Player::get_marker() << std::endl;
+void Player::printInfo() {
+    std::cout << "Player name: " << Player::getName() << " Marker: " << Player::getMarker() << std::endl;
 }
