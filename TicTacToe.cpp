@@ -146,7 +146,7 @@ void TicTacToe::showBoard() {
 }
 
 TicTacToe::Score TicTacToe::getScore(Board::Marker marker) {
-    if (hasNoBlanks()) { return Score::DRAW; }
+    if (hasNoBlanks() & not checkWin(marker)) { return Score::DRAW; }
     switch (marker) {
         case Board::Marker::X:
             return Score::X;
