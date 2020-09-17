@@ -14,6 +14,16 @@
 
 
 class Board {
+    // I Want this Class to:
+    // * Screen Settings
+    // * Print Board
+    // * Board functionality
+
+    // No game specific functionality here. This is just a board!
+
+    // TODO:
+    // * Move hasNoBlanks to TicTacToe
+
 
 public:
 
@@ -24,7 +34,13 @@ public:
         O = -1, BLANK, X
     };
 
-    struct Mouse { int x = -1, y = -1; };
+    enum MarkerChars{
+        char_O = 'O', char_BLANK='_', char_X = 'X'
+    };
+
+    struct Mouse {
+        int x = -1, y = -1;
+    };
 
     Mouse mouse;
     const int M;
@@ -36,7 +52,7 @@ public:
     std::vector<int> y_points;
     const char WINDOWNAME[10];
     int MARKER_SIZE[2];
-    std::vector<std::vector<int>> board;
+    std::vector<std::vector<Board::Marker>> board;
 
 
     Board(int n_rows, int n_cols, int window_size);
@@ -63,9 +79,7 @@ public:
 
     static void callBackFunc(int event, int x, int y, int flags, void *userdata);
 
-    void update();
-
-    static std::vector<std::vector<int>> createBoardArray(int row_length, int column_width);
+    static std::vector<std::vector<Board::Marker>> createBoardArray(int row_length, int column_width);
 
     std::tuple<int, int> getCell(int mouse_x, int mouse_y);
 
@@ -74,13 +88,20 @@ public:
 
     void printBoard();
 
-    void markBoard(int i, int j, int marker);
+    void markBoard(int i, int j, Marker marker);
+
+    void markBoard(std::tuple<int, int> coord, Marker marker);
 
     void unmarkBoard(int i, int j);
 
-    bool hasNoBlanks();
+    void unmarkBoard(std::tuple<int, int> coord);
+
+    static void printMove(int i, int j);
+
 
     void resetMouse();
+
+    char markerToChar(Marker marker);
 
 
 };

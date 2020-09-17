@@ -5,19 +5,18 @@
 #include <iostream>
 
 #include "Player.h"
-#include "TicTacToe.h"
+#include "MinimaxTicTacToe.h"
 
 int main() {
     std::cout << "Beginning" << std::endl;
 
-    Player player1("Cemlyn", Board::O);
+    Player player1("Cemlyn", Board::X);
     player1.printInfo();
 
-    Player player2("Bot", Board::X);
+    Player player2("Bot", Board::O);
     player2.printInfo();
 
-
-    TicTacToe game(4, 5, 4, player1, player2);
+    MinimaxTicTacToe game(4,4,4, player1, player2);
     game.play();
 
     std::cout << "Finished" << std::endl;

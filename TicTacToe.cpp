@@ -9,16 +9,11 @@ TicTacToe::TicTacToe(int m, int n, int k, Player player1, Player player2) :
         m(m), n(n), k(k), PLAYER_MAX(std::move(player1)), PLAYER_MIN(std::move(player2)), board(m, n, 540) {}
 
 
-int TicTacToe::endTest(char marker) {
-    if (board.hasNoBlanks()) {
-        // All spaces are occupied
-        return -1;
-    } else if (TicTacToe::checkWin(marker)) {
-        // This marker has won
-        return 1;
+TicTacToe::GameState TicTacToe::endTest(Board::Marker marker) {
+    if (hasNoBlanks() || checkWin(marker)) {
+        return GameState::FINISHED;
     } else {
-        // Game still in play
-        return 0;
+        return GameState::RUNNING;
     }
 
 }
@@ -59,13 +54,17 @@ bool TicTacToe::checkHoriz(int marker) {
     return false;
 }
 
-bool TicTacToe::checkDiag(int marker, int direction) {
+bool TicTacToe::checkDiag(Board::Marker marker, int direction) {
+    int chain_length;
     for (int c = -m; c < m; c++) {
-        int chain_length = 0;
+        chain_length = 0;
         for (int i = 0; i < n; i++) {
             if (0 <= direction * i + c && direction * i + c < m && 0 <= i && i < n) {
                 if (board.board[direction * i + c][i] == marker) {
                     chain_length++;
+                    if (chain_length == k) {
+                        return true;
+                    }
                 } else {
                     chain_length = 0;
                 }
@@ -73,21 +72,18 @@ bool TicTacToe::checkDiag(int marker, int direction) {
                 chain_length = 0;
             }
         }
-        if (chain_length == k) {
-            return true;
-        }
     }
     return false;
 }
 
-bool TicTacToe::checkWin(char marker) {
+bool TicTacToe::checkWin(Board::Marker marker) {
     if (checkVertical(marker) || checkHoriz(marker)) {
         return true;
     } else return checkDiag(marker, 1) || checkDiag(marker, -1);
 }
 
 std::tuple<int, int> TicTacToe::getUserInput() {
-    // This is modifiable, TODO: Insert GUI connection here
+    // This is modifiable
     static int a, b;
     if (board.screen == Board::ON) {
         std::tuple<int, int> mouse_position = board.getMousePosition();
@@ -104,32 +100,35 @@ std::tuple<int, int> TicTacToe::getUserInput() {
 
 void TicTacToe::play() {
     std::tuple<int, int> move;
-    bool game_over = false;
-
+    Score end_score;
     Player prev_player = PLAYER_MIN;
     Player curr_player = PLAYER_MAX;
 
     showBoard();
 
-    do {
+    while (true) {
         move = getUserInput();
         board.markBoard(std::get<0>(move), std::get<1>(move), curr_player.getMarker());
         showBoard();
-        std::swap(curr_player, prev_player);
-        switch (endTest(prev_player.getMarker())) {
-            case -1:
-                std::cout << "Draw" << std::endl;
-                game_over = true;
-                break;
-            case 0:
+        switch (endTest(curr_player.getMarker())) {
+            case GameState::RUNNING:
+                std::swap(curr_player, prev_player);
                 std::cout << "Player: " << curr_player.getName() << std::endl;
                 break;
-            case 1:
-                std::cout << "WON!" << std::endl;
-                game_over = true;
-                break;
+            case GameState::FINISHED:
+                std::cout << "Finished" << std::endl;
+                end_score = getScore(curr_player.getMarker());
+                switch (end_score) {
+                    case Score::DRAW:
+                        std::cout << "Draw!" << std::endl;
+                        break;
+                    default:
+                        std::cout << "Player: " << curr_player.name << " wins!" << std::endl;
+                        break;
+                }
+                return;
         }
-    } while (not(game_over));
+    }
 }
 
 void TicTacToe::showBoard() {
@@ -145,3 +144,37 @@ void TicTacToe::showBoard() {
             break;
     }
 }
+
+TicTacToe::Score TicTacToe::getScore(Board::Marker marker) {
+    if (hasNoBlanks()) { return Score::DRAW; }
+    switch (marker) {
+        case Board::Marker::X:
+            return Score::X;
+        case Board::Marker::O:
+            return Score::O;
+        case Board::Marker::BLANK:
+            std::cout << "You wanted the score for the blank marker?" << std::endl;
+            throw;
+    }
+}
+
+
+bool TicTacToe::hasNoBlanks() {
+    for (int i = 0; i < board.M; i++) {
+        for (int j = 0; j < board.N; j++) { if (board.board[i][j] == Board::BLANK) { return false; }}
+    }
+    return true;
+}
+
+std::vector<std::tuple<int, int>> TicTacToe::getOptions() {
+    std::vector<std::tuple<int, int>> options;
+    for (int i = 0; i < board.M; i++) {
+        for (int j = 0; j < board.N; j++) {
+            if (board.board[i][j] == Board::BLANK) {
+                options.emplace_back(std::tuple(i, j));
+            }
+        }
+    }
+    return options;
+}
+

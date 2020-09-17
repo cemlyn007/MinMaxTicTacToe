@@ -14,32 +14,49 @@
 
 
 class TicTacToe {
+    // I want:
+    // * All game specific logic
+    // * Scoring
+    // * GameState
+
 public:
 
-    int m;
-    int n;
-    int k;
-    Player PLAYER_MAX;
-    Player PLAYER_MIN;
+    enum Score {
+        O = -1, DRAW = 0, X = 1
+    };
+
+    enum GameState {
+        RUNNING, FINISHED
+    };
+
+    int m, n, k;
+    const Player PLAYER_MAX, PLAYER_MIN;
     Board board;
 
     TicTacToe(int m, int n, int k, Player player1, Player player2);
 
-    int endTest(char marker);
+    GameState endTest(Board::Marker marker);
 
     bool checkVertical(int marker);
 
     bool checkHoriz(int marker);
 
-    bool checkDiag(int marker, int direction);
+    bool checkDiag(Board::Marker marker, int direction);
 
-    bool checkWin(char marker);
+    bool checkWin(Board::Marker marker);
+
+    bool hasNoBlanks();
+
+    std::vector<std::tuple<int, int>> getOptions();
+
 
     std::tuple<int, int> getUserInput();
 
-    void play();
+    virtual void play();
 
     void showBoard();
+
+    Score getScore(Board::Marker marker);
 };
 
 

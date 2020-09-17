@@ -4,17 +4,16 @@
 
 #include "Player.h"
 #include <iostream>
+#include <utility>
 
-Player::Player(std::string player_name, int player_marker) {
-    name = std::move(player_name);
-    marker = player_marker;
+Player::Player(std::string player_name, Board::Marker player_marker) : name(player_name), marker(player_marker) {
 }
 
-std::string Player::getName() {
+std::string Player::getName() const {
     return Player::name;
 }
 
-int Player::getMarker() {
+Board::Marker Player::getMarker() const {
     return Player::marker;
 }
 

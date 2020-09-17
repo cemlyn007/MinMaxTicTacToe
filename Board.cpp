@@ -20,16 +20,18 @@ Board::Board(int n_rows, int n_cols, int window_size) :
         screen = ON;
         initialiseMarkerSize();
         initialiseGridPoints();
+    } else if (window_size == 0) {
+        screen = CONSOLE;
     } else {
         screen = OFF;
     }
 }
 
 
-std::vector<std::vector<int>> Board::createBoardArray(int row_length, int column_width) {
-    std::vector<std::vector<int>> new_board;
+std::vector<std::vector<Board::Marker>> Board::createBoardArray(int row_length, int column_width) {
+    std::vector<std::vector<Board::Marker>> new_board;
     for (int i = 0; i < row_length; i++) {
-        std::vector<int> temp(column_width, BLANK);
+        std::vector<Board::Marker> temp(column_width, BLANK);
         new_board.push_back(temp);
     }
     return new_board;
@@ -40,16 +42,17 @@ void Board::printBoard() {
     std::cout << "Printing board" << std::endl;
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < N; j++) {
-            std::cout << board[i][j] << " ";
+            std::cout << markerToChar(board[i][j]) << " ";
         }
         std::cout << std::endl;
     }
 }
 
-void Board::markBoard(int i, int j, int marker) {
+void Board::markBoard(int i, int j, Marker marker) {
     if (board[i][j] == BLANK) {
         board[i][j] = marker;
     } else {
+        printMove(i, j);
         throw; // Wanted to mark somewhere that is already marked... (mistake was made)}
 
     }
@@ -59,13 +62,6 @@ void Board::unmarkBoard(int i, int j) {
     board[i][j] = BLANK;
 }
 
-
-bool Board::hasNoBlanks() {
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) { if (board[i][j] == BLANK) { return false; }}
-    }
-    return true;
-}
 
 void Board::drawGrid() {
     Point p1, p2;
@@ -155,10 +151,6 @@ void Board::callBackFunc(int event, int x, int y, int flags, void *userdata) {
     }
 }
 
-void Board::update() {
-    // This function should be modified
-}
-
 void Board::populateCells() {
     for (int i = 0; i < M; ++i) {
         for (int j = 0; j < N; ++j) {
@@ -205,6 +197,41 @@ std::tuple<int, int> Board::getMousePosition() {
 void Board::resetMouse() {
     mouse.x = -1;
     mouse.y = -1;
+}
+
+char Board::markerToChar(Marker marker) {
+    switch (marker) {
+        case Marker::O:
+            return MarkerChars::char_O;
+        case Marker::BLANK:
+            return MarkerChars::char_BLANK;
+        case Marker::X:
+            return MarkerChars::char_X;
+    }
+    return 0;
+}
+
+void Board::markBoard(std::tuple<int, int> coord, Board::Marker marker) {
+    // TODO: markBoard should not be responsible for checking that the cell is indeed BLANK!
+    int i = std::get<0>(coord);
+    int j = std::get<1>(coord);
+    if (board[i][j] == BLANK) {
+        board[i][j] = marker;
+    } else {
+        printMove(i, j);
+        throw; // Wanted to mark somewhere that is already marked... (mistake was made)}
+
+    }
+}
+
+void Board::unmarkBoard(std::tuple<int, int> coord) {
+    int i = std::get<0>(coord);
+    int j = std::get<1>(coord);
+    board[i][j] = BLANK;
+}
+
+void Board::printMove(int i, int j) {
+    std::cout << "Move: (" << i << ", " << j << ")" << std::endl;
 }
 
 

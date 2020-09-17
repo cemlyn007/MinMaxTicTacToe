@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <utility>
+#include "Board.h"
 
 
 #ifndef MINIMAXTICTACTOE_PLAYER_H
@@ -14,10 +15,10 @@ class Player {
 
 public:
     std::string name;
-    char marker;
-    Player(std::string player_name, int player_marker);
-    std::string getName();
-    int getMarker();
+    Board::Marker marker;
+    Player(std::string player_name, Board::Marker player_marker);
+    std::string getName() const;
+    Board::Marker getMarker() const;
     void printInfo();
 };
 
