@@ -57,6 +57,9 @@ public:
     void showBoard();
 
     Score getScore(Board::Marker marker);
+
+    static Score getWorstCaseScore(Board::Marker marker);
+
 };
 
 

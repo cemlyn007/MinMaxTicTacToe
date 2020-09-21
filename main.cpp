@@ -5,7 +5,10 @@
 #include <iostream>
 
 #include "Player.h"
+#include "TicTacToe.h"
+#include "AlphaBetaPruningMinimaxTicTacToe.h"
 #include "MinimaxTicTacToe.h"
+
 
 int main() {
     std::cout << "Beginning" << std::endl;
@@ -16,6 +19,6 @@ int main() {
     Player player2("Bot", Board::O);
     player2.printInfo();
 
-    MinimaxTicTacToe game(3,3,3, player1, player2);
+    AlphaBetaPruningMinimaxTicTacToe game(4, 4, 4, player1, player2);
     game.play();
 }

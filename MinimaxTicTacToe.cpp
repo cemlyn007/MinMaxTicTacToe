@@ -15,7 +15,7 @@ MinimaxTicTacToe::MinimaxTicTacToe(int m, int n, int k,
 TicTacToe::Score MinimaxTicTacToe::getMiniMax(const Player &player, const Player &prev_player) {
     TicTacToe::GameState gameState = endTest(prev_player.getMarker());
     if (gameState == TicTacToe::GameState::RUNNING) {
-        Score best_score, score;
+        Score best_score;
         double (*optimiser)(double, double);
         Board::Marker marker = player.getMarker();
         std::vector<std::tuple<int, int>> options = getOptions();
@@ -37,7 +37,6 @@ TicTacToe::Score MinimaxTicTacToe::getMiniMax(const Player &player, const Player
         }
         return best_score;
     } else if (gameState == TicTacToe::GameState::FINISHED) {
-//        showBoard();
         return getScore(prev_player.getMarker());
     }
 }
@@ -51,10 +50,10 @@ std::tuple<int, int> MinimaxTicTacToe::getBestMove(const Player &curr_player, co
 
     // This code gets the optimiser and sets the initial best score (the worst case)
     if (marker == PLAYER_MAX.getMarker()) {
-        best_score = getScore(PLAYER_MIN.getMarker());
+        best_score = getWorstCaseScore(PLAYER_MAX.getMarker());
         optimiser = fmax;
     } else if (marker == PLAYER_MIN.getMarker()) {
-        best_score = getScore(PLAYER_MAX.getMarker());
+        best_score = getWorstCaseScore(PLAYER_MIN.getMarker());
         optimiser = fmin;
     }
 
@@ -62,6 +61,7 @@ std::tuple<int, int> MinimaxTicTacToe::getBestMove(const Player &curr_player, co
     for (std::tuple<int, int> move: options) {
         board.markBoard(move, curr_player.getMarker());
         score = getMiniMax(next_player, curr_player);
+        std::cout << "Move: (" << std::get<0>(move) <<", " << std::get<1>(move) << ") " << "Score: " << score << std::endl;
         best_score = (Score)optimiser(score, best_score);
         if (score == best_score) {
             best_move = move;
@@ -77,6 +77,7 @@ std::tuple<int, int> MinimaxTicTacToe::getUserInput(const Player &curr_player, c
         return getBestMove(curr_player, next_player);
     }
 
+    getBestMove(curr_player, next_player);
     // This is modifiable
     static int a, b;
     if (board.screen == Board::ON) {

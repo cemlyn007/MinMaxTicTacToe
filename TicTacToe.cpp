@@ -56,23 +56,39 @@ bool TicTacToe::checkHoriz(int marker) {
 
 bool TicTacToe::checkDiag(Board::Marker marker, int direction) {
     int chain_length;
-    for (int c = -m; c < m; c++) {
-        chain_length = 0;
-        for (int i = 0; i < n; i++) {
-            if (0 <= direction * i + c && direction * i + c < m && 0 <= i && i < n) {
-                if (board.board[direction * i + c][i] == marker) {
-                    chain_length++;
-                    if (chain_length == k) {
-                        return true;
-                    }
-                } else {
-                    chain_length = 0;
+    for (int c = -n; c < n; c++) {
+        for (int i = -n; i < n; i++) {
+            if (not(0 <= direction * i + c & direction * i + c < n & 0<=i & i < m)) {
+                chain_length = 0;
+                continue;
+            }
+            if (board.board[i][direction * i + c] == marker) {
+                chain_length++;
+                if (chain_length == k) {
+                    return true;
                 }
             } else {
                 chain_length = 0;
             }
         }
     }
+//    for (int c = -m; c < m; c++) {
+//        chain_length = 0;
+//        for (int i = 0; i < n; i++) {
+//            if (0 <= direction * i + c && direction * i + c < m && 0 <= i && i < n) {
+//                if (board.board[direction * i + c][i] == marker) {
+//                    chain_length++;
+//                    if (chain_length == k) {
+//                        return true;
+//                    }
+//                } else {
+//                    chain_length = 0;
+//                }
+//            } else {
+//                chain_length = 0;
+//            }
+//        }
+//    }
     return false;
 }
 
@@ -176,5 +192,17 @@ std::vector<std::tuple<int, int>> TicTacToe::getOptions() {
         }
     }
     return options;
+}
+
+TicTacToe::Score TicTacToe::getWorstCaseScore(Board::Marker marker) {
+    switch (marker) {
+        case Board::Marker::X:
+            return Score::O;
+        case Board::Marker::O:
+            return Score::X;
+        case Board::Marker::BLANK:
+            std::cout << "You wanted the score for the blank marker?" << std::endl;
+            throw;
+    }
 }
 
