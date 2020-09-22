@@ -9,7 +9,9 @@
 #include "Player.h"
 #include "TicTacToe.h"
 
-class AlphaBetaPruningMinimaxTicTacToe : public TicTacToe {
+class AlphaBetaPruningMinimaxTicTacToe : private TicTacToe {
+private:
+    Score getMiniMaxOfOption(std::tuple<int, int> option, const Player &curr_player, const Player &next_player);
 
 public:
 
@@ -17,7 +19,7 @@ public:
 
     std::tuple<int, int> getBestMove(const Player &curr_player, const Player &next_player);
 
-    TicTacToe::Score getMiniMax(const Player &player, const Player &prev_player, int alpha, int beta);
+    Score getMiniMax(Board &board, const Player &player, const Player &prev_player, int alpha, int beta);
 
     std::tuple<int, int> getUserInput(const Player &curr_player, const Player &next_player);
 

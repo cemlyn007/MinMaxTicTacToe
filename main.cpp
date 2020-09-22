@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "TicTacToe.h"
 #include "AlphaBetaPruningMinimaxTicTacToe.h"
-#include "MinimaxTicTacToe.h"
 
 
 int main() {
@@ -19,6 +18,6 @@ int main() {
     Player player2("Bot", Board::O);
     player2.printInfo();
 
-    AlphaBetaPruningMinimaxTicTacToe game(4, 4, 4, player1, player2);
+    AlphaBetaPruningMinimaxTicTacToe game(4, 4, 3, player1, player2);
     game.play();
 }

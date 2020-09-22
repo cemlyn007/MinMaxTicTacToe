@@ -19,10 +19,7 @@ class Board {
     // * Print Board
     // * Board functionality
 
-    // No game specific functionality here. This is just a board!
-
-    // TODO:
-    // * Move hasNoBlanks to TicTacToe
+    // No game specific functionality here. This is just a main_board!
 
 
 public:
@@ -56,6 +53,8 @@ public:
 
 
     Board(int n_rows, int n_cols, int window_size);
+
+    Board(const Board& obj);
 
     void initialiseGridPoints();
 

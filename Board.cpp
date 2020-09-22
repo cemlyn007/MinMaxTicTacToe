@@ -27,6 +27,13 @@ Board::Board(int n_rows, int n_cols, int window_size) :
     }
 }
 
+Board::Board(const Board &obj) :
+    M(obj.M), N(obj.N), WINDOWSIZE(obj.WINDOWSIZE),
+            image(Mat::zeros(obj.WINDOWSIZE, obj.WINDOWSIZE, CV_8UC3)),
+            WINDOWNAME("TicTacToe"), screen(OFF), board(obj.board) {
+    }
+
+
 
 std::vector<std::vector<Board::Marker>> Board::createBoardArray(int row_length, int column_width) {
     std::vector<std::vector<Board::Marker>> new_board;
@@ -39,7 +46,7 @@ std::vector<std::vector<Board::Marker>> Board::createBoardArray(int row_length, 
 
 
 void Board::printBoard() {
-    std::cout << "Printing board" << std::endl;
+    std::cout << "Printing main_board" << std::endl;
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < N; j++) {
             std::cout << markerToChar(board[i][j]) << " ";
@@ -233,6 +240,7 @@ void Board::unmarkBoard(std::tuple<int, int> coord) {
 void Board::printMove(int i, int j) {
     std::cout << "Move: (" << i << ", " << j << ")" << std::endl;
 }
+
 
 
 
